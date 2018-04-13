@@ -8,35 +8,46 @@ import urllib
 import requests
 
 
-base_url = "https://query.yahooapis.com/v1/public/yql?"
+base_url     = "https://query.yahooapis.com/v1/public/yql?"
+img_base_url = "http://l.yimg.com/a/i/us/we/52/"
+
+data_format = "&format=json"
+img_format = ".gif"
+
+temp_unit  = "C"
+speed_unit = "km/h"
+
 yql_query = (
   'select item.condition, wind from weather.forecast '
    'where woeid in (select woeid from geo.places(1) where text="berlin, de") '
      'and u = "c"' # metric scale
 )
-data_format = "&format=json"
-img_base_url = "http://l.yimg.com/a/i/us/we/52/"
-img_format = ".gif"
-temp_unit = " C"
-speed_unit = " km/h"
+
+
+def query_weather_data_as_json():
+  yql_url = base_url + urllib.urlencode({"q": yql_query}) + data_format
+  return requests.get(yql_url).json()
+
+
+def query_weather_data():
+  data = query_weather_data_as_json()
+  results = data["query"]["results"]["channel"]
+  condition, wind = results["item"]["condition"], results["wind"]
+  return [condition[k] for k in ["code", "temp", "text"]] + [wind["speed"]]
+
+
+def weather_icon(code):
+  return img_base_url + code + img_format
 
 
 def print_today_s_weather_report():
-  yql_url = base_url + urllib.urlencode({"q": yql_query}) + data_format
-  data = requests.get(yql_url).json()
-
-  results = data["query"]["results"]["channel"]
-  condition, wind = results["item"]["condition"], results["wind"]
-  
-  code, temp, text = [condition[k] for k in ["code", "temp", "text"]]
-  wind_speed = wind["speed"]
-  img_url = img_base_url + code + img_format
+  code, temp, text, wind_speed = query_weather_data()
 
   print "'{}', '{} {}', '{} {}', '{}'".format(
     text,
     temp, temp_unit,
     wind_speed, speed_unit,
-    img_url
+    weather_icon(code)
   )
 
 
