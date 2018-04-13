@@ -24,24 +24,8 @@ yql_query = (
 )
 
 
-def query_weather_data_as_json():
-  yql_url = base_url + urllib.urlencode({"q": yql_query}) + data_format
-  return requests.get(yql_url).json()
-
-
-def query_weather_data():
-  data = query_weather_data_as_json()
-  results = data["query"]["results"]["channel"]
-  condition, wind = results["item"]["condition"], results["wind"]
-  return [condition[k] for k in ["code", "temp", "text"]] + [wind["speed"]]
-
-
-def weather_icon(code):
-  return img_base_url + code + img_format
-
-
 def print_today_s_weather_report():
-  code, temp, text, wind_speed = query_weather_data()
+  code, temp, text, wind_speed = fetch_weather_data()
 
   print "'{}', '{} {}', '{} {}', '{}'".format(
     text,
@@ -50,6 +34,21 @@ def print_today_s_weather_report():
     weather_icon(code)
   )
 
+
+def fetch_weather_data():
+  data = query_weather_data()
+  results = data["query"]["results"]["channel"]
+  condition, wind = results["item"]["condition"], results["wind"]
+  return [condition[k] for k in ["code", "temp", "text"]] + [wind["speed"]]
+
+
+def query_weather_data():
+  yql_url = base_url + urllib.urlencode({"q": yql_query}) + data_format
+  return requests.get(yql_url).json()
+
+
+def weather_icon(code):
+  return img_base_url + code + img_format
 
 
 def main():
