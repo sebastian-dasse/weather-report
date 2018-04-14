@@ -27,7 +27,7 @@ yql_query = (
 def print_today_s_weather_report():
   code, temp, text, wind_speed = fetch_weather_data()
 
-  print "'{}', '{} {}', '{} {}', '{}'".format(
+  print "{}, {} {}, {} {}, {}".format(
     text,
     temp, temp_unit,
     wind_speed, speed_unit,

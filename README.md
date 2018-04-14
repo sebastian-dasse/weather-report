@@ -19,7 +19,7 @@ Still work in progress.
 
 ## Installation
 
-It is recommended to install PyPDF2 inside a virtualenv, to keep your system setup nice and tidy. However, if you don't care to mess up your system -- feel free to skip all steps related to virtualenv.
+It is recommended to install Requests inside a virtualenv, to keep your system setup nice and tidy. However, if you don't care to mess up your system -- feel free to skip all steps related to virtualenv.
 
 To install on Windows do the following:
 
@@ -32,3 +32,4 @@ To install on Windows do the following:
 7. Install Requests inside your virtualenv: `pip install requests`.
 8. To ensure that Requests was sucessfully installed check the output of: `pip list`.
 9. To run the weather-report do the following: ... TODO
+10. To deactivate *my_env* when you are done: `deactivate`.
